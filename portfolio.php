@@ -83,7 +83,8 @@
                 <th>Stocks List</th>
                 <th>Bought for</th>
                 <th>Current Value</th>
-                <th>Total Profit</th>
+		<th>Total Profit</th>
+		<th>Profit Percentage</th>
                 </tr>
 
             </thead>
@@ -111,7 +112,12 @@
             <td align=center><?php echo $data1[0]['bought_for'] ?></td>
             <td align=center><?php echo $data1[0]['close'] ?></td>
             <td align=center><?php echo $data1[0]['profit_per_stock'] ?></td>
-            </tr>
+	    <td align=center><?php
+                $profit_percentage = ($data1[0]['close'] - $data1[0]['bought_for'])/($data1[0]['bought_for'])*100;
+                // echo $profit_percentage;
+                echo number_format($profit_percentage, 2, '.', ''), '%';
+	    ?></td>	
+	    </tr>
             <?php endforeach;?>
 
         </tbody>
