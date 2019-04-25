@@ -6,42 +6,31 @@
     $credentials = "user = postgres password = postgres";
     $db = pg_connect("$host $port $dbname $credentials");
 
-    // $query_employee = "INSERT INTO employee VALUES ('$_POST[employee_id]', '$_POST[first_name]', '$_POST[last_name]',
-    //                                         '$_POST[salary]' , '$_POST[gender]', '$_POST[phone]', 
-    //                                         '$_POST[branch_id]', '$_POST[trainer]')";
-    // $result_employee = pg_query($query_employee);
-    // $employee_type = $_POST['trainer'];
-    // if ($employee_type == 'Trainer'){
-    //     $query_trainer = "INSERT INTO trainer VALUES ('$_POST[employee_id]',
-    //                                                  '$_POST[dependent]', '$_POST[specialization]')";U
-    //     $query_dependent = "INSERT INTO dependent VALUES ('$_POST[dependent]', '$_POST[employee_id]')";ame 
-    //     $result_trainer = pg_query($query_trainer);
-    //     $result_dependent = pg_query($query_dependent);
-    // } else{
-    //     $query_clerk = "INSERT INTO clerk VALUES ('$_POST[employee_id]', '$_POST[shift]')";
-    //     $result_clerk = pg_query($query_clerk);
-    // }
-    // echo "Successfully Inserted";
-    // echo "Successfully connected with database company";
-    // $result = pg_query("select * from abb");
-    // $myrow = pg_fetch_array($result);
-    // // $myrow = pg_fetch_assoc($result); 
-    // echo "<br>";
-    // echo $myrow[0], " ", $myrow[1], " ", $myrow[2], " ", $myrow[3], " ", $myrow[4], "<br>";
-    // echo "test"
+    
     echo $_POST["Username"];
-    // $x = pg_query("INSERT INTO user_info VALUES('$_POST[Username]','$_POST[email]','$_POST[password]'");
-    // echo $x;
     $query = "insert into user_info values('$_POST[Username]','$_POST[email]', '$_POST[password]')";
     $query = pg_query($query);
+    
     if($query)
-      echo "inserted successfully!";
+    {
+      echo "inserted successfully!<br>";
+      $name = preg_replace('/\s/', '_', $_POST["Username"]);
+      $query = "CREATE TABLE ". $name ." (name varchar(30) PRIMARY KEY NOT NULL, bought_on DATE NOT NULL, volume numeric, bought_for numeric );";
+
+      echo $query;
+
+      if (pg_query($query)) {
+          echo "table created hoorah";
+      } else {
+          echo "OH NO!";
+      }
+      pg_close($db);
+      header('location: login_page.php');
+      exit;
+     }
     else{
       echo "There was an error! ".pg_last_error();
+      pg_close($db);
     }
-
-    // $result = pg_query("select * from abb");
-    // echo "<br>", "Inserted Successfully";
-    // echo "result: ", $result;
-    pg_close($db);
+    
 ?>

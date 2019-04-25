@@ -1,7 +1,7 @@
-    
+	
 <?php
-    session_start();
-    $host = "host = localhost";
+	session_start();
+	$host = "host = localhost";
     $port = "port = 5432";
     $dbname = "dbname = company";
     $credentials = "user = postgres password = postgres";
@@ -32,47 +32,47 @@
     <link href="login_page.css" rel="stylesheet">
      <!-- <link href="css/style.css" rel="stylesheet" type="text/css" media="all" /> -->
 <!-- //Custom Theme files web font -->
-    <!--<link href="front_page.css" rel="stylesheet"> -->
+	<!--<link href="front_page.css" rel="stylesheet"> -->
   </head>
   <div class='content'>
-        <center><h1> <?php echo "$_SESSION[user_name]" ?> </h1></center>
-        <br><br>
-        <table id="stock_info" class="table" width="100%" cellspacing="1">
-        <thead>
-            <tr>
-            <!-- <th>Name</th> -->
-            <th>Stocks List</th>
-            <th>Bought on</th>
-            <th>Stocks Volume</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($data as $key => $emp) :?>
-            <tr>
-            <!-- <td align=center><?php echo $emp['name'] ?></td> -->
-            <td align=center><?php echo $emp['stocks_list'] ?></td>
-            <td align=center><?php 
-                session_start();
-                $host = "host = localhost";
-                $port = "port = 5432";
-                $dbname = "dbname = company";
-                $credentials = "user = postgres password = postgres";
-                $db = pg_connect("$host $port $dbname $credentials");
-                $name = $_SESSION[user_name];
-                $stock_name = $emp['stocks_list'];
+		<center><h1> <?php echo "$_SESSION[user_name]" ?> </h1></center>
+		<br><br>
+		<table id="stock_info" class="table" width="100%" cellspacing="1">
+		<thead>
+			<tr>
+			<!-- <th>Name</th> -->
+			<th>Stocks List</th>
+			<th>Bought on</th>
+			<th>Stocks Volume</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($data as $key => $emp) :?>
+			<tr>
+			<!-- <td align=center><?php echo $emp['name'] ?></td> -->
+			<td align=center><?php echo $emp['stocks_list'] ?></td>
+			<td align=center><?php 
+				session_start();
+				$host = "host = localhost";
+			    $port = "port = 5432";
+			    $dbname = "dbname = company";
+			    $credentials = "user = postgres password = postgres";
+			    $db = pg_connect("$host $port $dbname $credentials");
+				$name = $_SESSION[user_name];
+				$stock_name = $emp['stocks_list'];
                 $query_profits = "select * from $uname where name = '$stock_name';";
-                $fetch_profits = pg_query($query_profits);
-                $data1 = pg_fetch_all($fetch_profits);
-                echo $data1[0]['bought_on'];
-                pg_close($db);
-             ?></td>
-            <td align=center><?php echo $emp['stocks_volume'] ?></td>
-            </tr>
-        <?php endforeach;?>
-            
-        </tbody>
-        </table>
-    </div>
+				$fetch_profits = pg_query($query_profits);
+    			$data1 = pg_fetch_all($fetch_profits);
+    			echo $data1[0]['bought_on'];
+    			pg_close($db);
+			 ?></td>
+			<td align=center><?php echo $emp['stocks_volume'] ?></td>
+			</tr>
+		<?php endforeach;?>
+			
+		</tbody>
+		</table>
+	</div>
     <br><br><br>
     <div class='content'>
         <table id='profit_table' class='table' width="100%" cellspacing="1">
@@ -119,19 +119,13 @@
         </table>
     <h1>BUY</h1><br>
     <form action="buy.php" method="post">
-        Company Name<br><input type="text" name="stock_buy"><br>
-        Stock Quantity<br><input type="text" name="amount"><br>
-        Date<br><input type="text" name="date" placeholder="YYYY-MM-DD" required 
+    	Company Name<br><input type="text" name="stock_buy"><br>
+    	Stock Quantity<br><input type="text" name="amount"><br>
+    	Date<br><input type="text" name="date" placeholder="YYYY-MM-DD" required 
 pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" 
 title="Enter a date in this format YYYY-MM-DD"/><br>
-        <input type="submit" name="submit"><br>
-    </form>
-    <h1>SELL</h1><br>
-    <form action="sell.php" method = "post">
-        Company Name<br><input type="text" name="stock_buy"><br>
-        Stock Quantity<br><input type="text" name="amount"><br>
-        <input type="submit" name="submit"><br>
-    </form>
-    </div>
+    	<input type="submit" name="submit"><br>
+   	</form>
+	</div>
 </html>
 
