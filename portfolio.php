@@ -83,8 +83,8 @@
                 <th>Stocks List</th>
                 <th>Bought for</th>
                 <th>Current Value</th>
-		<th>Total Profit</th>
-		<th>Profit Percentage</th>
+		        <th>Total Profit</th>
+		        <th>Profit Percentage</th>
                 </tr>
 
             </thead>
@@ -100,7 +100,8 @@
                 $db = pg_connect("$host $port $dbname $credentials");
                 $name = $_SESSION[user_name];
                 $stock_name = $emp['stocks_list'];
-                $query_profits = "select $uname.name, $uname.bought_for, current_values.close, current_values.close - $uname.bought_for as Profit_Per_Stock from current_values inner join $uname on $uname.name = current_values.name where $uname.name = '$stock_name';";
+                $query_profits = "select $uname.name, $uname.bought_for, current_values.close, current_values.close - $uname.bought_for as Profit_Per_Stock, $uname.volume from current_values inner join $uname on $uname.name = current_values.name where $uname.name = '$stock_name';";
+                // $profits = $data1[0]['profit_per_stock']*(floatval($data1[0]['volume']));
                 $fetch_profits = pg_query($query_profits);
                 $data1 = pg_fetch_all($fetch_profits);
 //                echo $data1[0]['profit_per_stock'];
@@ -111,7 +112,7 @@
             <td align=center><?php echo $emp['stocks_list'] ?></td>
             <td align=center><?php echo $data1[0]['bought_for'] ?></td>
             <td align=center><?php echo $data1[0]['close'] ?></td>
-            <td align=center><?php echo $data1[0]['profit_per_stock'] ?></td>
+            <td align=center><?php echo floatval($data1[0]['profit_per_stock']*$data1[0]['volume']) ?></td>
 	    <td align=center><?php
                 $profit_percentage = ($data1[0]['close'] - $data1[0]['bought_for'])/($data1[0]['bought_for'])*100;
                 // echo $profit_percentage;
