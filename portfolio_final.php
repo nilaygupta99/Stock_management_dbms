@@ -1,7 +1,6 @@
     
 <?php
     session_start();
-
     $host = "host = localhost";
     $port = "port = 5432";
     $dbname = "dbname = company";
@@ -84,8 +83,8 @@
                 <th>Stocks List</th>
                 <th>Bought for</th>
                 <th>Current Value</th>
-                <th>Total Profit</th>
-                <th>Profit Percentage</th>
+		        <th>Total Profit</th>
+		        <th>Profit Percentage</th>
                 </tr>
 
             </thead>
@@ -114,12 +113,12 @@
             <td align=center><?php echo $data1[0]['bought_for'] ?></td>
             <td align=center><?php echo $data1[0]['close'] ?></td>
             <td align=center><?php echo floatval($data1[0]['profit_per_stock']*$data1[0]['volume']) ?></td>
-        <td align=center><?php
+	    <td align=center><?php
                 $profit_percentage = ($data1[0]['close'] - $data1[0]['bought_for'])/($data1[0]['bought_for'])*100;
                 // echo $profit_percentage;
                 echo number_format($profit_percentage, 2, '.', ''), '%';
-        ?></td> 
-        </tr>
+	    ?></td>	
+	    </tr>
             <?php endforeach;?>
 
         </tbody>
@@ -142,10 +141,4 @@ title="Enter a date in this format YYYY-MM-DD"/><br>
     </form>
     </div>
 </html>
-
-<?php if ($_SESSION['flag'] == 1){
-        echo '<script language="javascript">';
-        echo 'alert("Invalid Stock")';
-        echo '</script>';
-    } ?>
 

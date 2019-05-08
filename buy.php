@@ -6,6 +6,7 @@
     $credentials = "user = postgres password = postgres";
     $db = pg_connect("$host $port $dbname $credentials");
     $name = $_SESSION[user_name];
+    $uname = preg_replace('/\s/', '_', $_SESSION[user_name]);
     // echo $_POST["stock_buy"];
     // echo "succuess!!";
     // $sql = "select * from stock_details where name ='$_SESSION[user_name]'";
@@ -21,44 +22,61 @@
     $exist = pg_query($exist_query);
     $exist_array = pg_fetch_all($exist);
 
-    if ($exist_array[0]['name']){
-    	echo "company present";
-    	$a1 = floatval($_POST["amount"]);
-    	$query1 = "SELECT * from $uname WHERE name = '$stock';";
-    	$result0 = pg_query($query1);
-    	$h = pg_fetch_all($result0);
-    	$oa = floatval($h[0]['volume']);
-    	$ua = $a1 + $oa;
-    	$query0 = "UPDATE $uname SET volume = $ua WHERE name = '$stock';";
-    	$result0 = pg_query($query0);
-    	echo "done!!!";
-    } else {
-    	echo "company absent";
-    }
+    $q = "select * from $stock;";
+    $r = pg_query($q);
+    echo $q;
+    if ($r){
+    	echo "Valid Stock";
 
-    // $query0 = "insert into  $uname  values('$stock',  '$_POST[date]',".$_POST[amount].", $money); ";
-    // echo $query0;
+	    if ($exist_array[0]['name']){
+	    	echo "company present";
+	    	$a1 = floatval($_POST["amount"]);
+	    	$query1 = "SELECT * from $uname WHERE name = '$stock';";
+	    	$result0 = pg_query($query1);
+	    	$h = pg_fetch_all($result0);
+	    	$oa = floatval($h[0]['volume']);
+	    	$ua = $a1 + $oa;
+	    	$query0 = "UPDATE $uname SET volume = $ua WHERE name = '$stock';";
+	    	$result0 = pg_query($query0);
+	    	$query0 = "UPDATE stock_details SET stocks_volume = '$ua' WHERE name = '$uname' and stocks_list = '$stock';";
+	    	$result0 = pg_query($query0);
+	    	echo "done!!!";
+	    } else {
+	    	echo "company absent";
+	    
 
-    // $hell = pg_query($query0);
+		    $query0 = "insert into  $uname  values('$stock',  '$_POST[date]',".$_POST[amount].", $money); ";
+		    echo $query0;
 
-    // if ($hell) {
-    // 	echo "Inserted";
-    // } else {
-    // 	echo "RIP PROJECT";
-    // }
-    
-    // $query0 = "insert into stock_details values('$name','$stock',".$_POST[amount].");";
-    // echo $query0;
-    // $hell = pg_query($query0);
+		    $hell = pg_query($query0);
 
-    // if ($hell) {
-    // 	echo "Inserted";
-    // } else {
-    // 	echo "RIP PROJECT";
-    // }
-    
-    // echo $money;
-    // echo "hi";
-    // $query = "INSERT INTO $name"
+		    if ($hell) {
+		    	echo "Inserted";
+		    } else {
+		    	echo "RIP PROJECT";
+		    }
+		    
+		    $query0 = "insert into stock_details values('$name','$stock',".$_POST[amount].");";
+		    echo $query0;
+		    $hell = pg_query($query0);
+
+		    if ($hell) {
+		    	echo "Inserted";
+		    } else {
+		    	echo "Insert Failed";
+		    }
+		    
+		    // echo $money;
+		    // echo "hi";
+		    // $query = "INSERT INTO $name"
+		}
+	} else {
+		$_SESSION['flag'] = 1;
+	}
     pg_close($db);
+    header("location: portfolio.php");
+    echo '<script language="javascript">';
+		echo 'alert("Invalid Stock")';
+		echo '</script>';
+    exit;
 ?>
